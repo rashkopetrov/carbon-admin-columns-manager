@@ -3,55 +3,55 @@ Carbon Admin Columns Manager
 
 ### Библиотека за управление на WordPress колони от следните видове: ###
 
-#### Потребителски колони ####
+##### Потребителски колони #####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_users_columns()
 ```
 
-#### Пост колони ####
+##### Пост колони #####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('post_type_one', 'post_type_two', 'etc.'))
 ```
 
-#### Таксономиини колони ####
+##### Таксономиини колони #####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_taxonomy_columns(array('taxonomy_one', 'taxonomy_two', 'etc.'))
 ```
 
-###Възможни са следните манипулации:###
+#### Възможни са следните манипулации####
 
-#### Премахване на колони ####
+##### Премахване на колони #####
 ```PHP
 <?php
 ->remove(array('column_one', 'column_one', 'etc.'))
 ```
 функцията приема масив от имена на колони
 
-#### Добавяне на нови колони ####
+##### Добавяне на нови колони #####
 ```PHP
 <?php
 ->add( array() )
 ```
 функцията приема масив от обекти на колони
 
-### Създаване на колона: ###
+#### Създаване на колона: ####
 ```PHP
 <?php
 Carbon_Admin_Column::create('Име на колоната')
 ```
 
-### Колоните биват два вида: ###
+#### Колоните биват два вида: ####
 
-#### Извежда мета стойност при зададен ключ ####
+##### Извежда мета стойност при зададен ключ #####
 ```PHP
 <?php
 ->set_field('_meta_key')
 ```
 
-#### Обръща се към функция за обратно извикване и предава ID-то на обекта като параметър ####
+##### Обръща се към функция за обратно извикване и предава ID-то на обекта като параметър #####
 ```PHP
 <?php
 ->set_callback('callback_function_name')
@@ -59,7 +59,7 @@ Carbon_Admin_Column::create('Име на колоната')
 ->set_callback( function( $object_id ){ /* code goes here */ } )
 ```
 
-#### Придаване на опция за сортиране на колоната: ####
+##### Придаване на опция за сортиране на колоната: #####
 ```PHP
 <?php
 ->set_sortable(true, 'sortable_column_key')
@@ -68,16 +68,16 @@ Carbon_Admin_Column::create('Име на колоната')
 kogato 'sortable_column_key' не е зададен се генерира автоматично такъв спрямо името на колоната.
 
 
-### Примери ###
+#### Примери ####
 
-#### Премахване на 'author', 'date' и 'comments' колони за блог постове и страници: ####
+##### Премахване на 'author', 'date' и 'comments' колони за блог постове и страници: #####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 	->remove(array('author', 'date', 'comments'))
 ```
 
-#### Добаване на колона, която извежда стойност пазена с мета ключ '_meta_key_one' ####
+##### Добаване на колона, която извежда стойност пазена с мета ключ '_meta_key_one' #####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
@@ -88,7 +88,7 @@ Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 		));
 ```
 
-#### Добавяне на опция за сортиране на колоната 'My Meta Value' ####
+##### Добавяне на опция за сортиране на колоната 'My Meta Value' #####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
@@ -100,7 +100,7 @@ Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 		));
 ```
 
-#### Добаване на колона, която използва функция за обратно избикване и събира стойност на два мета записа. ####
+##### Добаване на колона, която използва функция за обратно избикване и събира стойност на два мета записа. #####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
@@ -111,8 +111,8 @@ Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 		));
 ```
 
-#### Примерна функция за обратно извикване (използвана в примера по-горе). ####
-#### Променливата $object_id е съответно ID на пост, потребител или търм. ####
+##### Примерна функция за обратно извикване (използвана в примера по-горе). #####
+##### Променливата $object_id е съответно ID на пост, потребител или търм. #####
 ```PHP
 <?php
 function callback_function_name( $object_id ) {
@@ -123,10 +123,10 @@ function callback_function_name( $object_id ) {
 }
 ```
 
-#### Аналогично за Таксономиини и Потребителски колони. ####
+##### Аналогично за Таксономиини и Потребителски колони. #####
 
 
-### Дъпълнителни фрагменти с примерен код ###
+#### Дъпълнителни фрагменти с примерен код ####
 
 ```PHP
 <?php
