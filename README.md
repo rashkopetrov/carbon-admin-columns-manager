@@ -42,18 +42,26 @@ kogato 'sortable_column_key' не е зададен се генерира авт
 =============
 
 Премахване на 'author', 'date' и 'comments' колони за блог постове и страници:
+```PHP
+<?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 	->remove(array('author', 'date', 'comments'))
+```
 
 Добаване на колона, която извежда стойност пазена с мета ключ '_meta_key_one'
+```PHP
+<?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 	->remove(array('author', 'date', 'comments'))
 	->add(array(
 			Carbon_Admin_Column::create('My Meta Value')
 				->set_field('_meta_key_one')
 		));
+```
 
 Добавяне на опция за сортиране на колоната 'My Meta Value'
+```PHP
+<?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 	->remove(array('author', 'date', 'comments'))
 	->add(array(
@@ -61,23 +69,30 @@ Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 				->set_sortable(true, 'sortable_column_key')
 				->set_field('_meta_key_one')
 		));
+```
 
 Добаване на колона, която използва функция за обратно избикване и събира стойност на два мета записа.
+```PHP
+<?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 	->remove(array('author', 'date', 'comments'))
 	->add(array(
 			Carbon_Admin_Column::create('My Callback Column')
 				->set_callback('callback_function_name')
 		));
+```
 
 Примерна функция за обратно извикване (използвана в примера по-горе).
 Променливата $object_id е съответно ID на пост, потребител или търм.
+```PHP
+<?php
 function callback_function_name( $object_id ) {
 	$meta_value_one = get_post_meta($object_id, '_meta_key_one', true);
 	$meta_value_two = get_post_meta($object_id, '_meta_key_two', true);
 
 	return intval($meta_value_one) + intval($meta_value_two);
 }
+```
 
 Аналогично за Таксономиини и Потребителски колони.
 
@@ -85,7 +100,8 @@ function callback_function_name( $object_id ) {
 Дъпълнителни фрагменти с примерен код
 =============
 
-
+```PHP
+<?php
 # Post types Columns
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 	->remove(array('author', 'date', 'comments'))
@@ -152,8 +168,4 @@ function user_callback($object_id) {
 
 	return $html;
 }
-
-
-
-
-
+```
