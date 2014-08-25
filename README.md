@@ -59,7 +59,7 @@ Carbon_Admin_Column::create('Име на колоната')
 ->set_callback( function( $object_id ){ /* code goes here */ } )
 ```
 
-### Придаване на опция за сортиране на колоната: ###
+#### Придаване на опция за сортиране на колоната: ####
 ```PHP
 <?php
 ->set_sortable(true, 'sortable_column_key')
@@ -70,14 +70,14 @@ kogato 'sortable_column_key' не е зададен се генерира авт
 
 ### Примери ###
 
-Премахване на 'author', 'date' и 'comments' колони за блог постове и страници:
+#### Премахване на 'author', 'date' и 'comments' колони за блог постове и страници: ####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 	->remove(array('author', 'date', 'comments'))
 ```
 
-Добаване на колона, която извежда стойност пазена с мета ключ '_meta_key_one'
+#### Добаване на колона, която извежда стойност пазена с мета ключ '_meta_key_one' ####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
@@ -88,7 +88,7 @@ Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 		));
 ```
 
-Добавяне на опция за сортиране на колоната 'My Meta Value'
+#### Добавяне на опция за сортиране на колоната 'My Meta Value' ####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
@@ -100,7 +100,7 @@ Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 		));
 ```
 
-Добаване на колона, която използва функция за обратно избикване и събира стойност на два мета записа.
+#### Добаване на колона, която използва функция за обратно избикване и събира стойност на два мета записа. ####
 ```PHP
 <?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
@@ -111,8 +111,8 @@ Carbon_Admin_Columns_Manager::modify_post_type_columns(array('page', 'post'))
 		));
 ```
 
-Примерна функция за обратно извикване (използвана в примера по-горе).
-Променливата $object_id е съответно ID на пост, потребител или търм.
+#### Примерна функция за обратно извикване (използвана в примера по-горе). ####
+#### Променливата $object_id е съответно ID на пост, потребител или търм. ####
 ```PHP
 <?php
 function callback_function_name( $object_id ) {
@@ -123,7 +123,7 @@ function callback_function_name( $object_id ) {
 }
 ```
 
-Аналогично за Таксономиини и Потребителски колони.
+#### Аналогично за Таксономиини и Потребителски колони. ####
 
 
 ### Дъпълнителни фрагменти с примерен код ###
