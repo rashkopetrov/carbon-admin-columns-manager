@@ -3,34 +3,58 @@ Carbon Admin Columns Manager
 
 Библиотека за управление на WordPress колони от следните видове:
 1. Потребителски колони
+```PHP
+<?php
 Carbon_Admin_Columns_Manager::modify_users_columns()
+```
 
 2. Пост колони
+```PHP
+<?php
 Carbon_Admin_Columns_Manager::modify_post_type_columns(array('post_type_one', 'post_type_two', 'etc.'))
+```
 
 3. Таксономиини колони
+```PHP
+<?php
 Carbon_Admin_Columns_Manager::modify_taxonomy_columns(array('taxonomy_one', 'taxonomy_two', 'etc.'))
+```
 
 Възможни са следните манипулации:
 1. Премахване на колони
+```PHP
+<?php
 ->remove(array('column_one', 'column_one', 'etc.'))
+```
 функцията приема масив от имена на колони
 
 2. Добавяне на нови колони
+```PHP
+<?php
 ->add( array() )
+```
 функцията приема масив от обекти на колони
 
 Създаване на колона:
+```PHP
+<?php
 Carbon_Admin_Column::create('Име на колоната')
+```
 
 Колоните биват два вида:
 1. Извежда мета стойност при зададен ключ
+```PHP
+<?php
 ->set_field('_meta_key')
+```
 
 2. Обръща се към функция за обратно извикване и предава ID-то на обекта като параметър
+```PHP
+<?php
 ->set_callback('callback_function_name')
-или
+# или
 ->set_callback( function( $object_id ){ /* code goes here */ } )
+```
 
 Придаване на опция за сортиране на колоната:
 ->set_sortable(true, 'sortable_column_key')
@@ -38,8 +62,7 @@ Carbon_Admin_Column::create('Име на колоната')
 kogato 'sortable_column_key' не е зададен се генерира автоматично такъв спрямо името на колоната.
 
 
-Примери
-=============
+## Примери ##
 
 Премахване на 'author', 'date' и 'comments' колони за блог постове и страници:
 ```PHP
@@ -97,8 +120,7 @@ function callback_function_name( $object_id ) {
 Аналогично за Таксономиини и Потребителски колони.
 
 
-Дъпълнителни фрагменти с примерен код
-=============
+## Дъпълнителни фрагменти с примерен код ##
 
 ```PHP
 <?php
