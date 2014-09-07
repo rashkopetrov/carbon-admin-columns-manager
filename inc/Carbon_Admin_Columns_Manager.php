@@ -6,24 +6,9 @@
 class Carbon_Admin_Columns_Manager {
 	
 	/**
-	 * Column Type
-	 *
-	 * Available options : post_columns, taxonomy_columns, user_columns
-	 *
-	 * @var string $type
+	 * @var array
 	 */
-	protected $type;
-
-	/**
-	 * Target name
-	 *
-	 * The target name might be taxonomies or post types
-	 *
-	 * @see set_target()
-	 * @see get_target()
-	 * @var array|string $targets
-	 */
-	protected $targets;
+	public $object_types = array();
 
 	/**
 	 * Sepcify columns for removal.
@@ -34,35 +19,22 @@ class Carbon_Admin_Columns_Manager {
 	 */
 	protected $columns_to_remove;
 
+	protected $columns_objects = array();
+
 	static function modify_post_type_columns( $post_types ) {
-		return new Carbon_Admin_Columns_Manager_Post_Columns('post_columns', $post_types);
+		return new Carbon_Admin_Columns_Manager_Post_Columns($post_types);
 	}
 
 	static function modify_users_columns() {
-		return new Carbon_Admin_Columns_Manager_User_Columns('user_columns');
+		return new Carbon_Admin_Columns_Manager_User_Columns();
 	}
 
 	static function modify_taxonomy_columns( $taxonomies ) {
-		return new Carbon_Admin_Columns_Manager_Taxonomy_Columns('taxonomy_columns', $taxonomies);
+		return new Carbon_Admin_Columns_Manager_Taxonomy_Columns($taxonomies);
 	}
 
-	private function __construct($type, $targets='') {
-		$this->type = $type;
-		$this->set_target($targets);
-	}
-
-	public function set_target($targets) {
-		$this->targets = (array) $targets;
-
-		return $this;
-	}
-
-	public function get_targets() {
-		return $this->targets;
-	}
-
-	public function get_type() {
-		return $this->type;
+	private function __construct($object_types=array()) {
+		$this->object_types = (array) $object_types;
 	}
 
 	public function unset_admin_columns($columns) {
