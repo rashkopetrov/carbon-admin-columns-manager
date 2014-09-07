@@ -11,8 +11,6 @@ class Carbon_Admin_Columns_Manager_User_Columns extends Carbon_Admin_Columns_Man
 	}
 
 	public function add( $columns ) {
-		$this->object_types = array('users');
-
 		foreach ($columns as $column_index => $column) {
 			if ( !is_a($column, 'Carbon_Admin_Column') ) {
 				wp_die( 'Object must be of type Carbon_Admin_Column' );
@@ -20,37 +18,34 @@ class Carbon_Admin_Columns_Manager_User_Columns extends Carbon_Admin_Columns_Man
 
 			$this->columns_objects[ $column->get_column_name() ] = $column;
 
-			foreach ($this->object_types as $object_type) {
-				// Filter the columns list
+			// Filter the columns list
+			add_filter(
+				'manage_users_columns',
+				array($column, 'register_column'),
+				15
+			);
+
+			// Filter the columns content for each row
+			add_action(
+				'manage_users_custom_column',
+				array($this, 'column_callback'),
+				15,
+				3
+			);
+
+			if ( $column->sort_field ) {
+				// If necessary, filter sortable flags. 
 				add_filter(
-					'manage_users_columns',
-					array($column, 'register_column'),
-					15
+					'manage_users_sortable_columns',
+					array($column, 'init_column_sortable')
 				);
-
-				// Filter the columns content for each row
-				add_action(
-					'manage_users_custom_column',
-					array($this, 'column_callback'),
-					15,
-					3
-				);
-
-				if ( $column->sort_field ) {
-					// If necessary, filter sortable flags. 
-					add_filter(
-						'manage_users_sortable_columns',
-						array($column, 'init_column_sortable')
-					);
-				}
 			}
-
 		}
 	}
 
-	public function column_callback( $null, $column_name, $object_id ) {
+	public function column_callback( $default, $column_name, $object_id ) {
 		if ( !isset($this->columns_objects[ $column_name ]) ) {
-			return;
+			return $default;
 		}
 
 		$column = $this->columns_objects[ $column_name ];
@@ -59,7 +54,7 @@ class Carbon_Admin_Columns_Manager_User_Columns extends Carbon_Admin_Columns_Man
 
 		# check whether this is the right column
 		if ( $this_column_name !== $column_name ) {
-			return;
+			return $default;
 		}
 
 		$callback_type = $column->get_callback();
