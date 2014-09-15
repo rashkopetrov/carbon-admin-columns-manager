@@ -1,4 +1,8 @@
 <?php  
+if ( class_exists('Carbon_Admin_Column') ) {
+	return;
+}
+
 require_once('inc/Carbon_Admin_Columns_Manager.php');
 
 require_once('inc/Carbon_Admin_Columns_Manager_Post_Columns.php');
