@@ -47,8 +47,6 @@ class Carbon_Admin_Columns_Manager {
 
 	public function is_correct_location() { /* */ }
 
-	public function column_callback() { /* */ }
-
 	public function add( $columns ) {
 		if ( !$this->is_correct_location() ) {
 			return;
