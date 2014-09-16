@@ -31,7 +31,7 @@ class Carbon_Admin_Columns_Manager_Post_Columns extends Carbon_Admin_Columns_Man
 	}
 
 	public function column_callback( $column_name, $object_id ) {
-		$this->column_callback_result($column_name, $object_id);
+		$this->render_column_value($column_name, $object_id);
 	}
 
 	public function get_meta_value( $object_id, $meta_key ) {

@@ -3,7 +3,7 @@
 /**
  * Plugin Name: CRB Columns Manager
  */
-class Carbon_Admin_Columns_Manager {
+abstract class Carbon_Admin_Columns_Manager {
 	
 	/**
 	 * @var array
@@ -45,7 +45,8 @@ class Carbon_Admin_Columns_Manager {
 		return $columns;
 	}
 
-	public function is_correct_location() { /* */ }
+	abstract public function is_correct_location();
+	/* abstract public function column_callback(various args ... );*/
 
 	public function add( $columns ) {
 		if ( !$this->is_correct_location() ) {
@@ -86,29 +87,32 @@ class Carbon_Admin_Columns_Manager {
 		}
 	}
 
-	public function column_callback_result( $column_name, $object_id ) {
-		if ( !isset($this->columns_objects[ $column_name ]) ) {
+	public function render_column_value($looped_column_name, $object_id) {
+		echo $this->get_column_value($looped_column_name, $object_id);
+	}
+
+	public function get_column_value($looped_column_name, $object_id) {
+		if ( !isset($this->columns_objects[ $looped_column_name ]) ) {
 			return;
 		}
 
-		$column = $this->columns_objects[ $column_name ];
-
-		$this_column_name = $column->get_column_name();
+		$column = $this->columns_objects[ $looped_column_name ];
 
 		# check whether this is the right column
-		if ( $this_column_name !== $column_name ) {
+		if ( $column->get_column_name() !== $looped_column_name ) {
 			return;
 		}
 
-		$callback_type = $column->get_callback();
+		$callback = $column->get_callback();
 		$results = '';
 
-		if ( $callback_type==='get_meta_value' ) {
-			$results = $this->get_meta_value($object_id, $column->get_field());
+		if ( is_callable($callback) ) {
+			$results = call_user_func($callback, $object_id);
 		} else {
-			$results = call_user_func($column->get_callback(), $object_id);
+			// Fallback to meta value whenever callback is not set
+			$results = $this->get_meta_value($object_id, $column->get_field());
 		}
 
-		echo $results;
+		return $results;
 	}
 }

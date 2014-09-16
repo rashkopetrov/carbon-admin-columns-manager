@@ -34,7 +34,7 @@ class Carbon_Admin_Column {
 	 * will print  custom field value associated with 
 	 * the column name.
 	 */
-	public $callback = 'get_meta_value';
+	public $callback;
 
 	static function create($label, $name = null) {
 		if ( !$label ) {

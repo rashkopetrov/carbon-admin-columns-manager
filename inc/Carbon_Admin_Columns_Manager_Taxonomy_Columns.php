@@ -31,7 +31,7 @@ class Carbon_Admin_Columns_Manager_Taxonomy_Columns extends Carbon_Admin_Columns
 	}
 
 	public function column_callback( $null, $column_name, $object_id ) {
-		$this->column_callback_result($column_name, $object_id);
+		$this->render_column_value($column_name, $object_id);
 	}
 
 	public function get_meta_value( $object_id, $meta_key ) {
