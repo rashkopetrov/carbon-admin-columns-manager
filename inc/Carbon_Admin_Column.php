@@ -16,7 +16,7 @@ class Carbon_Admin_Column {
 	protected $name;
 
 	/**
-	 * The field that will be used for ordeing the posts. Null value will
+	 * The field that will be used for ordering the posts. Null value will
 	 * disable the ordering capability.
 	 * 
 	 * @var string $sort_field
@@ -29,12 +29,22 @@ class Carbon_Admin_Column {
 	public $meta_key = null;
 
 	/**
-	 * Callback that will be used for rendering columns 
+	 * Callback that will be used for rendering column
 	 * values in WP admin listing screen. By default, this 
-	 * will print  custom field value associated with 
+	 * will print custom field value, associated with 
 	 * the column name.
 	 */
 	public $callback;
+
+	/**
+	 * Column Width
+	 * 
+	 * The accepted values might be in percents ( '10%' ) and in pixels ( '10px' ),
+	 * as well as integers (100), which are automatically converted to pixels.
+	 *
+	 * @var mixed
+	 */
+	public $width = null;
 
 	static function create($label, $name = null) {
 		if ( !$label ) {
@@ -50,19 +60,32 @@ class Carbon_Admin_Column {
 		if ( empty($name) ) {
 			$name = 'carbon-' . preg_replace('~[^a-zA-Z0-9.]~', '', $label);
 		}
-		$this->set_column_name($name);
+		$this->set_name( 'crb' . md5( uniqid() . $name ) );
 
 		return $this;
 	}
 
-	public function set_column_name($name) {
+	public function set_name($name) {
 		$this->name = $name;
 
 		return $this;
 	}
 
-	public function get_column_name() {
+	public function get_name() {
 		return $this->name;
+	}
+
+	public function set_width( $width ) {
+		if (is_int($width)) {
+			$width .= 'px';
+		}
+		$this->width = $width;
+
+		return $this;
+	}
+
+	public function get_width() {
+		return $this->width;
 	}
 
 	public function set_field($meta_key) {
@@ -104,7 +127,7 @@ class Carbon_Admin_Column {
 		$sort_field = $this->sort_field;
 
 		if ( !$sort_field ) {
-			$sort_field = $this->get_column_name();
+			$sort_field = $this->get_name();
 		}
 
 		return $sort_field;
@@ -125,7 +148,7 @@ class Carbon_Admin_Column {
 	}
 
 	public function init_column_sortable($columns) {
-		$columns[ $this->get_column_name() ] = $this->sort_field;
+		$columns[ $this->get_name() ] = $this->sort_field;
 
 		return $columns;  
 	}
