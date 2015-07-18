@@ -1,5 +1,5 @@
 <?php
- 
+
 class Carbon_Admin_Columns_Manager_Post extends Carbon_Admin_Columns_Manager {
 
 	public function columns_modifier() {
@@ -11,7 +11,7 @@ class Carbon_Admin_Columns_Manager_Post extends Carbon_Admin_Columns_Manager {
 	public function get_column_filter_name( $post_type_name ) {
 		return 'manage_edit-' . $post_type_name . '_columns';
 	}
- 
+
 	public function get_column_filter_content( $post_type_name ) {
 		return 'manage_' . $post_type_name . '_posts_custom_column';
 	}
@@ -21,6 +21,8 @@ class Carbon_Admin_Columns_Manager_Post extends Carbon_Admin_Columns_Manager {
 
 		if ( !empty($_GET['post_type']) ) {
 			$post_type = $_GET['post_type'];
+		} elseif( defined('DOING_AJAX') && DOING_AJAX && !empty($_POST['post_type']) ) {
+			$post_type = $_POST['post_type'];
 		}
 
 		return in_array($post_type, $this->object_types);

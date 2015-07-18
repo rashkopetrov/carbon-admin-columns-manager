@@ -1,7 +1,7 @@
 <?php
 
 abstract class Carbon_Admin_Columns_Manager {
-	
+
 	/**
 	 * @var array
 	 */
@@ -37,7 +37,7 @@ abstract class Carbon_Admin_Columns_Manager {
 
 	public function remove( $columns_to_remove ) {
 		$this->columns_to_remove = (array) $columns_to_remove;
-		
+
 		$this->columns_modifier();
 
 		return $this;
@@ -45,7 +45,7 @@ abstract class Carbon_Admin_Columns_Manager {
 
 	public function sort( $sorted_columns ) {
 		$this->sorted_columns = array_reverse( (array) $sorted_columns );
-		
+
 		$this->columns_modifier();
 
 		return $this;
@@ -104,7 +104,7 @@ abstract class Carbon_Admin_Columns_Manager {
 				);
 
 				if ( $column->sort_field ) {
-					// If necessary, filter sortable flags. 
+					// If necessary, filter sortable flags.
 					add_filter(
 						'manage_edit-' . $object_type . '_sortable_columns',
 						array($column, 'init_column_sortable')

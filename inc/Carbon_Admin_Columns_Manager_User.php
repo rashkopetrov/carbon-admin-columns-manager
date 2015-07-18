@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Carbon_Admin_Columns_Manager_User extends Carbon_Admin_Columns_Manager {
 
@@ -33,7 +33,7 @@ class Carbon_Admin_Columns_Manager_User extends Carbon_Admin_Columns_Manager {
 			);
 
 			if ( $column->sort_field ) {
-				// If necessary, filter sortable flags. 
+				// If necessary, filter sortable flags.
 				add_filter(
 					'manage_users_sortable_columns',
 					array($column, 'init_column_sortable')
@@ -55,8 +55,8 @@ class Carbon_Admin_Columns_Manager_User extends Carbon_Admin_Columns_Manager {
 	 *   - it should return default value when the currently looped column doesn't
 	 *     match with the object's registered column
 	 * @param  string $default     The default value for that column
-	 * @param  string $column_name 
-	 * @param  int $object_id   
+	 * @param  string $column_name
+	 * @param  int $object_id
 	 * @return string
 	 */
 	public function column_callback( $default, $column_name, $object_id ) {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Carbon_Admin_Column {
 	/**
@@ -18,7 +18,7 @@ class Carbon_Admin_Column {
 	/**
 	 * The field that will be used for ordering the posts. Null value will
 	 * disable the ordering capability.
-	 * 
+	 *
 	 * @var string $sort_field
 	 */
 	public $sort_field;
@@ -30,15 +30,15 @@ class Carbon_Admin_Column {
 
 	/**
 	 * Callback that will be used for rendering column
-	 * values in WP admin listing screen. By default, this 
-	 * will print custom field value, associated with 
+	 * values in WP admin listing screen. By default, this
+	 * will print custom field value, associated with
 	 * the column name.
 	 */
 	public $callback;
 
 	/**
 	 * Column Width
-	 * 
+	 *
 	 * The accepted values might be in percents ( '10%' ) and in pixels ( '10px' ),
 	 * as well as integers (100), which are automatically converted to pixels.
 	 *
@@ -150,6 +150,6 @@ class Carbon_Admin_Column {
 	public function init_column_sortable($columns) {
 		$columns[ $this->get_name() ] = $this->sort_field;
 
-		return $columns;  
+		return $columns;
 	}
 }

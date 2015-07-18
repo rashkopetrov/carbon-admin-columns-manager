@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Carbon_Admin_Columns_Manager_Taxonomy extends Carbon_Admin_Columns_Manager {
 
@@ -11,7 +11,7 @@ class Carbon_Admin_Columns_Manager_Taxonomy extends Carbon_Admin_Columns_Manager
 	public function get_column_filter_name( $taxonomy_name ) {
 		return 'manage_edit-' . $taxonomy_name . '_columns';
 	}
- 
+
 	public function get_column_filter_content( $taxonomy_name ) {
 		return 'manage_' . $taxonomy_name . '_custom_column';
 	}
@@ -21,6 +21,8 @@ class Carbon_Admin_Columns_Manager_Taxonomy extends Carbon_Admin_Columns_Manager
 
 		if ( !empty($_GET['taxonomy']) ) {
 			$taxonomy_name = $_GET['taxonomy'];
+		} elseif( defined('DOING_AJAX') && DOING_AJAX && !empty($_POST['taxonomy']) ) {
+			$taxonomy_name = $_POST['taxonomy'];
 		}
 
 		return in_array($taxonomy_name, $this->object_types);
