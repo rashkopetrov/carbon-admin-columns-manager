@@ -12,14 +12,18 @@ Remove date and author columns from page listing screen, and add 2 extra columns
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
-	  ->remove( array('date', 'author') )
-	  ->add( array(
-			Carbon_Admin_Column::create('Color')
-			   ->set_field('color'),
-			Carbon_Admin_Column::create('Views Count')
-			   ->set_field('views_count'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
+  ->remove( array('date', 'author') )
+  ->add( array(
+		Carbon_Admin_Column::create('Color')
+		   ->set_field('color'),
+		Carbon_Admin_Column::create('Views Count')
+		   ->set_field('views_count'),
+	 ));
+?>
+```
 
 **Print column values with callback function**
 Add an extra column to page listing screen: views. Every page with more than 1000 views is rendered with a special CSS class `popular-page`.
@@ -28,36 +32,44 @@ This is achieved by using a custom callback function for printing the content of
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
-	  ->add( array(
-			Carbon_Admin_Column::create('Views Count')
-			   ->set_callback('crb_admin_render_view_count_col'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
+  ->add( array(
+		Carbon_Admin_Column::create('Views Count')
+		   ->set_callback('crb_admin_render_view_count_col'),
+	 ));
 
-	function crb_admin_render_view_count_col( $post_id ) {
-		$views_count = get_post_meta($post_id, 'views_count', 1);
-		$views_count = intval($views_count);
+function crb_admin_render_view_count_col( $post_id ) {
+	$views_count = get_post_meta($post_id, 'views_count', 1);
+	$views_count = intval($views_count);
 
-		if ($views_count > 1000) {
-			$views_count = '<span class="popular-page">' . $views_count . '</span>';
-		}
-
-		return $views_count;
+	if ($views_count > 1000) {
+		$views_count = '<span class="popular-page">' . $views_count . '</span>';
 	}
+
+	return $views_count;
+}
+?>
+```
 
 **Modify custom post type columns**
 Remove date and author columns from the `crb_cars` custom post type listing screen, and add 2 extra columns (`model` and `price`). The values for the extra columns are fetched from certain post meta fields.
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('crb_cars') )
-	  ->remove( array('date', 'author') )
-	  ->add( array(
-			Carbon_Admin_Column::create('Model')
-			   ->set_field('_crb_car_model'),
-			Carbon_Admin_Column::create('Price')
-			   ->set_field('_crb_car_price'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('crb_cars') )
+  ->remove( array('date', 'author') )
+  ->add( array(
+		Carbon_Admin_Column::create('Model')
+		   ->set_field('_crb_car_model'),
+		Carbon_Admin_Column::create('Price')
+		   ->set_field('_crb_car_price'),
+	 ));
+?>
+```
 
 **Render featured image in the listing table**
 
@@ -65,21 +77,25 @@ To show the featured image for the `post`, `page` and `crb_cars` post types, use
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page', 'post', 'crb_cars') )
-	  ->add( array(
-			Carbon_Admin_Column::create('Thumbnail')
-			   ->set_callback('crb_column_render_post_thumbnail'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page', 'post', 'crb_cars') )
+  ->add( array(
+		Carbon_Admin_Column::create('Thumbnail')
+		   ->set_callback('crb_column_render_post_thumbnail'),
+	 ));
 
-	function crb_column_render_post_thumbnail( $post_id ) {
-		if ( has_post_thumbnail( $post_id ) ) {
-			$thumbnail = get_the_post_thumbnail( $post_id, 'my_backend_image_size' );
-		} else {
-			$thumbnail = '';
-		}
-
-		return $thumbnail;
+function crb_column_render_post_thumbnail( $post_id ) {
+	if ( has_post_thumbnail( $post_id ) ) {
+		$thumbnail = get_the_post_thumbnail($post_id, 'my_backend_image_size');
+	} else {
+		$thumbnail = '';
 	}
+
+	return $thumbnail;
+}
+?>
+```
 
 **Modify taxonomy columns**
 
@@ -88,24 +104,28 @@ Showing the term image is achieved by using a custom callback function and showi
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('taxonomy', array('category', 'post_tag') )
-	  ->remove( array('description', 'posts') )
-	  ->add( array(
-			Carbon_Admin_Column::create('Subtitle')
-			   ->set_field('crb_term_subtitle'),
-			Carbon_Admin_Column::create('Image')
-			   ->set_callback('crb_column_render_term_image'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('taxonomy', array('category', 'post_tag') )
+  ->remove( array('description', 'posts') )
+  ->add( array(
+		Carbon_Admin_Column::create('Subtitle')
+		   ->set_field('crb_term_subtitle'),
+		Carbon_Admin_Column::create('Image')
+		   ->set_callback('crb_column_render_term_image'),
+	 ));
 
-	function crb_column_render_term_image( $term_id ) {
-		if ( $term_image_id = carbon_get_term_meta( $term_id, 'crb_term_image' ) ) {
-			$term_image = wp_get_attachment_image( $term_image_id, 'my_backend_image_size' );
-		} else {
-			$term_image = '';
-		}
-
-		return $term_image;
+function crb_column_render_term_image( $term_id ) {
+	if ( $term_image_id = get_term_meta($term_id, 'crb_term_image') ) {
+		$term_image = wp_get_attachment_image($term_image_id, 'my_backend_image_size');
+	} else {
+		$term_image = '';
 	}
+
+	return $term_image;
+}
+?>
+```
 
 **Modify user columns**
 
@@ -114,23 +134,27 @@ Showing the user status (active / inactive) is achieved by using the field meta 
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('user')
-	  ->remove( array('email', 'role', 'posts') )
-	  ->add( array(
-			Carbon_Admin_Column::create('Is Active')
-			   ->set_field('crb_user_status'),
-			Carbon_Admin_Column::create('Registration Date')
-			   ->set_callback('crb_column_get_user_registration_date'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('user')
+  ->remove( array('email', 'role', 'posts') )
+  ->add( array(
+		Carbon_Admin_Column::create('Is Active')
+		   ->set_field('crb_user_status'),
+		Carbon_Admin_Column::create('Registration Date')
+		   ->set_callback('crb_column_get_user_registration_date'),
+	 ));
 
-	function crb_column_get_user_registration_date( $user_id ) {
-		$user = get_user_by( 'id', $user_id );
-		$user_registration_date = $user->data->user_registered;
+function crb_column_get_user_registration_date( $user_id ) {
+	$user = get_user_by( 'id', $user_id );
+	$user_registration_date = $user->data->user_registered;
 
-		$friendly_date_text = date( 'd F, Y', strtotime( $user_registration_date ) );
+	$friendly_date_text = date( 'd F, Y', strtotime( $user_registration_date ) );
 
-		return $friendly_date_text;
-	}
+	return $friendly_date_text;
+}
+?>
+```
 
 **How to deal with the responsive version of the WordPress admin**
 
@@ -142,37 +166,41 @@ In this example we will use the regular post function to retrieve the informatio
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
-		->remove( array('date', 'author', 'comments') )
-		->add( array(
-			Carbon_Admin_Column::create('Page Information')
-				->set_callback('crb_column_page_information'),
-		) );
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
+	->remove( array('date', 'author', 'comments') )
+	->add( array(
+		Carbon_Admin_Column::create('Page Information')
+			->set_callback('crb_column_page_information'),
+	) );
 
-	function crb_column_page_information( $page_id ) {
-		ob_start();
-		?>
-		<ul>
-			<?php if ( has_post_thumbnail() ): ?>
-				<li>
-					<?php the_post_thumbnail( 'thumbnail' ) ?>
-				</li>
-			<?php endif ?>
+function crb_column_page_information( $page_id ) {
+	ob_start();
+	?>
+	<ul>
+		<?php if ( has_post_thumbnail() ): ?>
 			<li>
-				Posted on : <?php the_time('F jS, Y ') ?>
+				<?php the_post_thumbnail( 'thumbnail' ) ?>
 			</li>
-			<li>
-				 <?php printf(__('Posted by : %s', 'crb'), get_the_author()) ?>
-			</li>
-			<li>
-				<?php comments_popup_link( __('No Comments', 'crb'), __('1 Comment', 'crb'), __('% Comments', 'crb') ); ?>
-			</li>
-		</ul>
-		<?php
-		$page_information_content = ob_get_clean();
+		<?php endif ?>
+		<li>
+			Posted on : <?php the_time('F jS, Y ') ?>
+		</li>
+		<li>
+			 <?php printf(__('Posted by : %s', 'crb'), get_the_author()) ?>
+		</li>
+		<li>
+			<?php comments_popup_link( __('No Comments', 'crb'), __('1 Comment', 'crb'), __('% Comments', 'crb') ); ?>
+		</li>
+	</ul>
+	<?php
+	$page_information_content = ob_get_clean();
 
-		return $page_information_content;
-	}
+	return $page_information_content;
+}
+?>
+```
 
 **Create a sortable column in the WordPress admin**
 
@@ -180,55 +208,63 @@ Create a sortable column on page listing screen that sorts the pages by their vi
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
-		->add( array(
-			Carbon_Admin_Column::create('Page Information')
-				->set_sort_field('views_count'), # that value will be accessible as 'orderby' get parameter.
-				->set_callback('crb_column_page_information'),
-		) );
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
+	->add( array(
+		Carbon_Admin_Column::create('Page Information')
+			->set_sort_field('views_count'), # that value will be accessible as 'orderby' get parameter.
+			->set_callback('crb_column_page_information'),
+	) );
 
-	add_action('pre_get_posts', 'crb_sort_pages_by_their_views_count');
-	function crb_sort_pages_by_their_views_count( $query ) {
+add_action('pre_get_posts', 'crb_sort_pages_by_their_views_count');
+function crb_sort_pages_by_their_views_count( $query ) {
 
-		if (
-			is_admin()
-			&& $query->is_main_query()
-			&& get_query_var( 'post_type' )==='page'
-			&& !empty( $_GET['orderby'] )
-			&& $_GET['orderby']==='orderby_custom_column'
-		) {
+	if (
+		is_admin()
+		&& $query->is_main_query()
+		&& get_query_var( 'post_type' )==='page'
+		&& !empty( $_GET['orderby'] )
+		&& $_GET['orderby']==='orderby_custom_column'
+	) {
 
-			$query->set('orderby', 'meta_value_num');
-			$query->set('meta_key', '_crb_page_views');
-		}
-
-		return $query;
+		$query->set('orderby', 'meta_value_num');
+		$query->set('meta_key', '_crb_page_views');
 	}
+
+	return $query;
+}
+?>
+```
 
 Create a sortable column on user listing screen that sorts the users by their status (active / inactive).
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('user')
-		->add( array(
-			Carbon_Admin_Column::create('Is User Active')
-				->set_field('_crb_is_user_active')
-				->set_sort_field('orderby_status'),
-		) );
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('user')
+	->add( array(
+		Carbon_Admin_Column::create('Is User Active')
+			->set_field('_crb_is_user_active')
+			->set_sort_field('orderby_status'),
+	) );
 
-	add_action( 'pre_get_users', 'crb_pre_user_query' );
-	function crb_pre_user_query( $user_query ) {
-		global $wpdb;
+add_action( 'pre_get_users', 'crb_pre_user_query' );
+function crb_pre_user_query( $user_query ) {
+	global $wpdb;
 
-		if (
-			is_admin()
-			&& !empty($_GET['orderby'])
-			&& $_GET['orderby']==='orderby_status'
-		) {
-			$user_query->set('meta_key', '_crb_is_user_active');
-			$user_query->set('orderby', 'meta_value');
-		}
+	if (
+		is_admin()
+		&& !empty($_GET['orderby'])
+		&& $_GET['orderby']==='orderby_status'
+	) {
+		$user_query->set('meta_key', '_crb_is_user_active');
+		$user_query->set('orderby', 'meta_value');
 	}
+}
+?>
+```
 
 **Set custom width to a column in the WordPress admin**
 
@@ -236,19 +272,23 @@ Set different width to Color, Views Count and Status columns for the page listin
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
-		->remove( array('date', 'author') )
-		->add( array(
-			Carbon_Admin_Column::create('Color')
-				->set_width( '80%' )
-				->set_field('color'),
-			Carbon_Admin_Column::create('Views Count')
-				->set_width( '25px' )
-				->set_field('views_count'),
-			Carbon_Admin_Column::create('Status')
-				->set_width( 100 )
-				->set_field('status'),
-		));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
+	->remove( array('date', 'author') )
+	->add( array(
+		Carbon_Admin_Column::create('Color')
+			->set_width( '80%' )
+			->set_field('color'),
+		Carbon_Admin_Column::create('Views Count')
+			->set_width( '25px' )
+			->set_field('views_count'),
+		Carbon_Admin_Column::create('Status')
+			->set_width( 100 )
+			->set_field('status'),
+	));
+?>
+```
 
 Please, note that WordPress administration is responsive and you should use a reasonable number of columns, as well as reasonable width for each one of them. For example, having a column width of 600 pixels might cause issues on mobile devices.
 
@@ -260,29 +300,35 @@ Setting up custom name for Image column on page listing screen and setting maxim
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
-		->remove( array('date', 'author') )
-		->add( array(
-			Carbon_Admin_Column::create('Color')
-				->set_name( 'crb-column-page-thumbnail' )
-				->set_width( '100px' )
-				->set_field('color'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
+	->remove( array('date', 'author') )
+	->add( array(
+		Carbon_Admin_Column::create('Color')
+			->set_name( 'crb-column-page-thumbnail' )
+			->set_width( '100px' )
+			->set_field('color'),
+	 ));
+?>
+```
 
 CSS:
 
-	<style type="text/css">
-		/* column heading */
-		#carbon-crb-column-page-thumbnail {
-			font-weight : bold;
-		}
+```css
+<style type="text/css">
+	/* column heading */
+	#carbon-crb-column-page-thumbnail {
+		font-weight : bold;
+	}
 
-		/* column value */
-		.crb-column-page-thumbnail img {
-			max-width : 100%;
-			height : auto;
-		}
-	</style>
+	/* column value */
+	.crb-column-page-thumbnail img {
+		max-width : 100%;
+		height : auto;
+	}
+</style>
+```
 
 **How to reorder the columns on the admin listing screeen?**
 
@@ -290,13 +336,17 @@ Moving page thumbnail column between the post checkbox and title columns. It's r
 
 Code:
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
-		->sort( array('cb', 'crb-thumbnail-column') )
-		->add( array(
-			Carbon_Admin_Column::create('Thumbnail')
-				->set_name( 'crb-thumbnail-column' )
-				->set_callback('crb_column_thumbnail'),
-		 ));
+```php
+<?php
+Carbon_Admin_Columns_Manager::modify_columns('post', array('page') )
+	->sort( array('cb', 'crb-thumbnail-column') )
+	->add( array(
+		Carbon_Admin_Column::create('Thumbnail')
+			->set_name( 'crb-thumbnail-column' )
+			->set_callback('crb_column_thumbnail'),
+	 ));
+?>
+```
 
 ------
 
@@ -309,45 +359,57 @@ Use the following callback function to display the post thumbnail photo.
 
 Code :
 
-	function crb_column_thumbnail( $post_id ) {
-		if ( has_post_thumbnail( $post_id ) ) {
-			return get_the_post_thumbnail( $post_id, 'admin_thumbnails' );
-		}
+```php
+<?php
+function crb_column_thumbnail( $post_id ) {
+	if ( has_post_thumbnail( $post_id ) ) {
+		return get_the_post_thumbnail( $post_id, 'admin_thumbnails' );
 	}
+}
+?>
+```
 
 **Page Template**
 Use the following callback function to display the page template name.
 
 Code :
 
-	function crb_column_page_template( $page_id ) {
-		$page_template_name = array_search(
-			get_post_meta( $page_id, '_wp_page_template', true ),
-			get_page_templates()
-		);
+```php
+<?php
+function crb_column_page_template( $page_id ) {
+	$page_template_name = array_search(
+		get_post_meta( $page_id, '_wp_page_template', true ),
+		get_page_templates()
+	);
 
-		if ( $page_template_name === false ) {
-			$page_template_name = 'Default';
-		}
-
-		return $page_template_name;
+	if ( $page_template_name === false ) {
+		$page_template_name = 'Default';
 	}
+
+	return $page_template_name;
+}
+?>
+```
 
 **Page Sidebar**
 Use the following callback function to display the sidebar that is selected for each page.
 
 Code :
 
-	function crb_column_page_template( $page_id ) {
+```php
+<?php
+function crb_column_page_template( $page_id ) {
 
-		$sidebar = get_post_meta( $page_id, 'crb_custom_sidebar', true );
+	$sidebar = get_post_meta( $page_id, 'crb_custom_sidebar', true );
 
-		if ( empty($sidebar) ) {
-			$sidebar = 'Default Sidebar';
-		}
-
-		return $page_template_name;
+	if ( empty($sidebar) ) {
+		$sidebar = 'Default Sidebar';
 	}
+
+	return $page_template_name;
+}
+?>
+```
 
 ------
 
@@ -360,50 +422,62 @@ There are three types of manager for Posts, Taxonomies and Users listing pages.
 
 Code :
 
-	$post_types = array( 'post_type_one', 'post_type_two' );
+```php
+<?php
+$post_types = array( 'post_type_one', 'post_type_two' );
 
-	$columns_to_remove = array( 'column_one', 'column_two' );
+$columns_to_remove = array( 'column_one', 'column_two' );
 
-	$custom_column_order = array( 'column_name_five', 'column_name_four', 'column_name_three' );
+$custom_column_order = array( 'column_name_five', 'column_name_four', 'column_name_three' );
 
-	$columns_to_add = array( $columns_code_goes_here );
+$columns_to_add = array( $columns_code_goes_here );
 
-	Carbon_Admin_Columns_Manager::modify_columns('post', $post_types )
-		->remove( $columns_to_remove ) # remove unnecessary columns
-		->sort( $custom_column_order ) # set custom column order
-		->add( $columns_to_add ) # add new columns
+Carbon_Admin_Columns_Manager::modify_columns('post', $post_types )
+	->remove( $columns_to_remove ) # remove unnecessary columns
+	->sort( $custom_column_order ) # set custom column order
+	->add( $columns_to_add ) # add new columns
+?>
+```
 
 *Taxonomy Manager*
 
 Code :
 
-	$taxonomies = array( 'taxonomy_name_one', 'taxonomy_name_two' );
+```php
+<?php
+$taxonomies = array( 'taxonomy_name_one', 'taxonomy_name_two' );
 
-	$columns_to_remove = array( 'column_one', 'column_two' );
+$columns_to_remove = array( 'column_one', 'column_two' );
 
-	$custom_column_order = array( 'column_name_five', 'column_name_four', 'column_name_three' );
+$custom_column_order = array( 'column_name_five', 'column_name_four', 'column_name_three' );
 
-	$columns_to_add = array( $columns_code_goes_here );
+$columns_to_add = array( $columns_code_goes_here );
 
-	Carbon_Admin_Columns_Manager::modify_columns('taxonomy', $taxonomies )
-		->remove( $columns_to_remove ) # remove unnecessary columns
-		->sort( $custom_column_order ) # set custom column order
-		->add( $columns_to_add ) # add new columns
+Carbon_Admin_Columns_Manager::modify_columns('taxonomy', $taxonomies )
+	->remove( $columns_to_remove ) # remove unnecessary columns
+	->sort( $custom_column_order ) # set custom column order
+	->add( $columns_to_add ) # add new columns
+?>
+```
 
 *Users Manager*
 
 Code :
 
-	$columns_to_remove = array( 'column_one', 'column_two' );
+```php
+<?php
+$columns_to_remove = array( 'column_one', 'column_two' );
 
-	$custom_column_order = array( 'column_name_five', 'column_name_four', 'column_name_three' );
+$custom_column_order = array( 'column_name_five', 'column_name_four', 'column_name_three' );
 
-	$columns_to_add = array( $columns_code_goes_here );
+$columns_to_add = array( $columns_code_goes_here );
 
-	Carbon_Admin_Columns_Manager::modify_columns('user')
-		->remove( $columns_to_remove ) # remove unnecessary columns
-		->sort( $custom_column_order ) # set custom column order
-		->add( $columns_to_add ) # add new columns
+Carbon_Admin_Columns_Manager::modify_columns('user')
+	->remove( $columns_to_remove ) # remove unnecessary columns
+	->sort( $custom_column_order ) # set custom column order
+	->add( $columns_to_add ) # add new columns
+?>
+```
 
 **Column**
 
@@ -411,39 +485,47 @@ Code :
 
 Code :
 
-	$column_name = __('My Column Name', 'crb');
+```php
+<?php
+$column_name = __('My Column Name', 'crb');
 
-	$meta_key = '_crb_meta_key';
+$meta_key = '_crb_meta_key';
 
-	Carbon_Admin_Column::create( $column_name )
-		->set_field( $meta_key ),
+Carbon_Admin_Column::create( $column_name )
+	->set_field( $meta_key ),
+?>
+```
 
 *Column that prints its value through callback function*
 
 Code :
 
-	$column_name = __('My Column Name', 'crb');
+```php
+<?php
+$column_name = __('My Column Name', 'crb');
 
-	$callback_function_name = 'crb_callback_function';
+$callback_function_name = 'crb_callback_function';
 
-	Carbon_Admin_Column::create( $column_name )
-		->set_callback( $callback_function_name ),
+Carbon_Admin_Column::create( $column_name )
+	->set_callback( $callback_function_name ),
 
-	/**
-	 * Callback Function
-	 *
-	 * @param $object_id Post ID, Term ID or User Id according to the Manager
-	 */
-	function crb_callback_function( $object_id ) {
-		# posts
-		return get_post_meta( $object_id, '_crb_meta_key', true );
+/**
+ * Callback Function
+ *
+ * @param $object_id Post ID, Term ID or User Id according to the Manager
+ */
+function crb_callback_function( $object_id ) {
+	# posts
+	return get_post_meta( $object_id, '_crb_meta_key', true );
 
-		# terms
-		return carbon_get_term_meta( $object_id, '_crb_meta_key' );
+	# terms
+	return get_term_meta( $object_id, '_crb_meta_key' );
 
-		# users
-		return get_user_meta( $object_id, '_crb_meta_key', true );
-	}
+	# users
+	return get_user_meta( $object_id, '_crb_meta_key', true );
+}
+?>
+```
 
 *Available Column Functions*
 
@@ -455,68 +537,12 @@ Code :
 
 Code :
 
-	Carbon_Admin_Column::create( $column_label )
-		->set_field( $meta_key )
-		->set_callback( $callback_function_name )
-		->set_name( $column_name )
-		->set_sort_field( $crb_sorting_value )
-
-------
-
-## FAQ
-
-**Трябва ли да включа библиотеката, за я ползвам?**
-За всички нови проекти тази библиотека ще бъде част от lib папката. За по-стари проекти ще можете да я ползвате след изпълнение на drone upgrade-lib в проекта си, като ще трябва ръчно да добавите файла за колоните в /options и да го include-нете във functions.php.
-
-**Има ли особеност при използване на библиотеката в плъгини или в други теми?**
-Желателно е при вмъкването на библиотеката да проверявате дали вече не се вмъква от плъгин или от темата с проверка за вече вмъкната библиотека с `class_exists`.
-
-Code :
-
-	if ( !class_exists(Carbon_Admin_Columns_Manager) ) {
-		include_once( PATH_TO_LIBRARY . 'carbon-admin-columns-manager.php');
-	}
-
-**Има ли ограничение в броят на колоните?**
-Ограничение от страна на кода няма, разбира се, не е хубаво да се злоупотребява и винаги трябва да се проверява как се държат при по-ниски резолюции.
-
-**Мога ли да задам определена ширина на колоната?**
-Възможно е задаване на ширини в пиксели и в проценти. Описано е в пример по-горе.
-
-**Как мога да стилвам съдържанието на колоната?**
-Необходимо е да се зададе уникално име на колоната след, което е възможно нейното стилване по име. Описано е в пример по-горе.
-
-**Мога ли да променям стойността на вече съществуваща колона?**
-За момента не е възможно, тъй като post/taxonomy колоните принтират стойността и без 'хакане' не може да стане по хубав начин.
-
-**Защо колоната връща стойността над таблицата?**
-Този проблем възниква само при потребителските колони, когато стойността на callback функцията се принтира `echo`.
-Необходимо е стойността да се връща `return`.
-
-**Мога ли да променям стойността на вече съществуваща колона?**
-За момента не е възможно, тъй като post/taxonomy колоните принтират стойността и без 'хакане' не може да стане по хубав начин.
-
-**Искам да премахна определена колона, но не и знам името. Откъде мога да го видя?**
-Обикновено то е ID-то колоната. Може да се провери с browser dev tool-а.
-
-**Мога ли да използвам библиотеката на мултиезичен сайт?**
-Разбира се.
-
-**Има ли определена структура при инициализиране на колоните?**
-Определена структура няма. По авторско мнение би било желателно да се следва следния модел:
-
-Code :
-
-	if ( !class_exists('Carbon_Admin_Columns_Manager') ) {
-		return;
-	}
-
-	add_action( 'init', 'crb_admin_columns' );
-	function crb_admin_columns(){
-
-		// columns code goes here
-
-	}
-
-**Мога ли да сортирам колоните в определен ред?**
-Възможно е пренареждане на колоните като колоните, които не са зададени в масива от колони ще бъдат последни. Примерът е описан по-горе.
+```php
+<?php
+Carbon_Admin_Column::create( $column_label )
+	->set_field( $meta_key )
+	->set_callback( $callback_function_name )
+	->set_name( $column_name )
+	->set_sort_field( $crb_sorting_value )
+?>
+```
